@@ -387,6 +387,7 @@ begin
   // This is the message format expected by Scratch. The first four
   // bytes are the message length.
   // See http://scratch.mit.edu/forums/viewtopic.php?id=9458 for details.
+  // Also http://scratchconnections.wik.is/
   Msg := Format( 'XXXXsensor-update "Pin%d" %d', [Pin, Value] );
   Msg[1] := #0;
   Msg[2] := #0;
