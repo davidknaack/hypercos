@@ -1,0 +1,32 @@
+Scratch Extension Protocol
+
+  John Maloney
+  September 2, 2008
+
+Introduction
+
+Scratch 1.3 includes an experimental extension feature that supports interaction between Scratch and other programs.Three kinds of interaction are supported:  a. sharing broadcasts (in both directions)  b. virtual sensors
+  c. Scratch's global variables are made visible
+
+This document describes this mechanism in sufficient detail to allow people to write their own programs that interact with Scratch in any programming language that supports sockets, such as Python, Java, Ruby, ActionScript, or Squeak.
+ProtocolThe experimental extension feature is enabled using the right-button menu on one of the two sensor blocks. When remote sensors are enabled, Scratch listens for connections on port 42001. Once a connection is established, messages are sent in both directions over the socket connection.
+Each message consists of a four-byte size field, most-significant byte first, followed by the message itself:	<size: 4 bytes><msg: size bytes>The four-byte size field is not counted as part of the message size. Thus, an empty message is four zero bytes.
+
+Message Types
+The message up to the first whitespace character (any byte <= 32) is a case-insensitive message type string that is used to decide how to handle the message.
+
+Clients should extract and check the message type string from a message before doing further processing. The set of message types will be extended over time, so client code should be written to skip messages with types that it does not understand. Messages may eventually be used to transmit large amounts of binary data in arbitrary formats. Thus, clients must be prepared to handle (and possibly discard) large messages.Common Message TypesMost message types contain human-readable strings made up of the following elements:  - unquoted single-word strings (cat, mouse-x)  - quoted strings ("a four word string", "embedded ""quotation marks"" are doubled")  - numbers (1, -1, 3.14, -1.2, .1, -.2)  - booleans (true or false)
+
+Words and strings are encoded in UTF-8. (Note: ASCII is a subset of UTF-8).
+
+Here are the two most useful message types:	broadcast <string>	sensor-update <var-name_1> <new-value_1> ...
+A sensor update message includes one or more (variable name, value) pairs. Variable names are strings. Values can be either numbers or quoted strings.
+
+Here is example:
+
+	sensor-update "note" 60 "seconds" 0.1
+	broadcast "play note"
+
+The first message sets the value of two virtual sensors named "note" and "seconds". The second broadcasts the "play note" message. A Scratch script might respond to this broadcast by playing a note as specified by the sensor values.
+
+Scratch sends these two message types when broadcasts or global variable changes occur. Scratch also responds to these messages. Broadcast messages sent to Scratch cause a broadcast to occur. Sensor-update messages update the values of virtual sensors available in the sensor block drop-down menu.
