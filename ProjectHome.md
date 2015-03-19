@@ -1,0 +1,3 @@
+HyperCos is a communication bridge that allows MIT's Scratch project to use the Arduino microcontroller platform as a remote sensor and output device. It is written in Delphi v7 and is heavily commented so that less experienced programmers might have an easier time understanding the code and also to explain various points of the architecture.
+
+HyperCos was inspired by the Catenary project ( http://scratchconnections.wik.is/User:Chalkmarrow/Catenary ) and is more or less compatible with it. Thanks go to Scratch Connections user Chalkmarrow for the idea.
